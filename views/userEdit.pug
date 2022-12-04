@@ -1,9 +1,13 @@
 html
-    head 
-        title=tilte 
+    head
+        link(type="text/css" rel="stylesheet", href="userForm.css")
+        title=title
     body 
         -var users=users
-                message=message
+        div 
+            div
+                h1=message
+            div
                 form(action=`/users-edit/${users.id}` method="POST") 
                     label(for="name")="New Name: "
                     input(type="text" name="name" id="name")

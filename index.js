@@ -10,14 +10,17 @@ var users = []
 app.set('views', './views');
 app.set('view engine', 'pug');
 
+app.use(express.static(__dirname + '/views'));
+
+
 app.use(bodyParser.urlencoded( { extended: false }));
 
 
 app.get("/users-form", (req, res) => {
     res.render('userForm', {
         title: 'Users',
-        message: "Add a user",
-        btn1: "Submit"
+        message: "Adicione um Usuario",
+        btn1: "Enviar"
     });
 });
 
@@ -26,7 +29,6 @@ app.post("/users-form", (req, res) => {
     var value = req.body
     users.push(value)
     res.redirect("/users-list")
-    console.log("User as insert")
 });
 
 app.get('/users-list', (req, res) => {
@@ -43,7 +45,6 @@ app.get('/users-list', (req, res) => {
 app.get("/users-delete/:id", (req,res) => {
     let index = users.findIndex(i => i.id === req.params.id);
     users.splice(index, 1)
-    console.log(users)
     res.redirect("/users-list");
 });
 var idAtual = ""
@@ -52,7 +53,7 @@ app.get("/users-edit/:id", (req, res) => {
     res.render('userEdit', {
         title: 'Edit user',
         users: users,
-        message: `Edit user id: ${req.params.id}`,
+        message: `Editar usuario`,
         btn1: `Confirm`
     });
 })

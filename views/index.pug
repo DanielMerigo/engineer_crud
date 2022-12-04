@@ -1,15 +1,22 @@
 html 
     head
         title=title
+        link(type="text/css" rel="stylesheet", href="style.css")
     body
-        div    
-            h1=message
-            -var users=users
-                each val, i in users
-                        li="Id: " + val.id + " - " + "name: " + val.name  + "  -  "+ "phone:" + val.phone 
-                            a(class=`button` href=`/users-edit/${val.id}`) Edit 
-                            a(class=`button` href=`/users-delete/${val.id}`) Delete
-        a(class='button' href='/users-form') Return do add users
+        div 
+            div(class="center_h1")   
+                h1=message
+        -var users=users
+            each val, i in users
+                div(class="center")
+                    ul
+                        p=`Nome: ${val.name}`
+                        p=`Telefone: ${val.phone}`
+                        div(class="btn")
+                            a(class=`edit` href=`/users-edit/${val.id}`) Editar 
+                            a(class=`delete` href=`/users-delete/${val.id}`) Deletar
+        div(class="center")                       
+            a(class='return' href='/users-form') Adicionar mais usuarios
                         
                 
 
