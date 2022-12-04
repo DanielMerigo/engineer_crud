@@ -1,0 +1,12 @@
+html 
+    head 
+        title=title 
+    body 
+        div 
+            message=message
+        form(action="/users-form" method="POST")
+            label(for="name")="Name :"
+            input(type="text" name="name" id="name")
+            label(for="phone")="Phone: " 
+            input(type="text" name="phone" id="phone")
+            button(type="submit")=btn1 

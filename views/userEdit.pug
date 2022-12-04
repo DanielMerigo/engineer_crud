@@ -1,0 +1,12 @@
+html
+    head 
+        title=tilte 
+    body 
+        -var users=users
+                message=message
+                form(action=`/users-edit/${users.id}` method="POST") 
+                    label(for="name")="New Name: "
+                    input(type="text" name="name" id="name")
+                    label(for="phone")="New Phone: "     
+                    input(type="text" name="phone" id="phone")
+                    button(type="submit")=btn1

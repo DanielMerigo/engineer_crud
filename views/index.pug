@@ -1,0 +1,16 @@
+html 
+    head
+        title=title
+    body
+        div    
+            h1=message
+            -var users=users
+                each val, i in users
+                        li="Id: " + val.id + " - " + "name: " + val.name  + "  -  "+ "phone:" + val.phone 
+                            a(class=`button` href=`/users-edit/${val.id}`) Edit 
+                            a(class=`button` href=`/users-delete/${val.id}`) Delete
+        a(class='button' href='/users-form') Return do add users
+                        
+                
+
+
