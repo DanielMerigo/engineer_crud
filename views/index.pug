@@ -6,8 +6,7 @@ html
         div 
             div(class="center_h1")   
                 h1=message
-        -var users=users
-            each val, i in users
+            each val, i in data
                 div(class="center")
                     ul
                         p=`Nome: ${val.name}`
