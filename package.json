@@ -4,7 +4,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon start index.js"
+    "start": "nodemon start index.js",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --write . && git add -A ."
+    }
+  },
+  "lint-staged": {
+    "*": "prettier --write"
   },
   "keywords": [],
   "author": "Daniel Merigo",
@@ -12,6 +22,7 @@
   "dependencies": {
     "body-parser": "^1.20.1",
     "express": "^4.18.2",
+    "husky": "^8.0.2",
     "nodemon": "^2.0.20",
     "pug": "^3.0.2",
     "uuid": "^9.0.0"
@@ -24,5 +35,8 @@
     "url": "https://github.com/DanielMerigo/test_express/issues"
   },
   "homepage": "https://github.com/DanielMerigo/test_express#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "prettier": "^2.8.0"
+  }
 }
