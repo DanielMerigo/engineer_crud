@@ -1,0 +1,19 @@
+html
+    head
+        link(type="text/css" rel="stylesheet", href="/userForm.css")
+        title=title
+    body 
+        div(class="center")
+            div(class="center_h1")
+                h1
+                    message=message
+            div(class="form")             
+                form(action=`/users-edit/${userId}` method="POST")
+                    div(class="inputs") 
+                        label(for="name")="Novo nome"
+                        input(type="text" name="name" id="name" required)
+                    div(class="inputs") 
+                        label(for="phone")="Novo Telefone" 
+                        input(type="text" name="phone" id="phone" required)
+                    div(class="inputs_button") 
+                        button(type="submit")=btn1 
