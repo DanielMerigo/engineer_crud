@@ -11,9 +11,9 @@ html
                 form(action=`/users-edit/${userId}` method="POST")
                     div(class="inputs") 
                         label(for="name")="Novo nome"
-                        input(type="text" name="name" id="name" required)
+                        input(type="text" name="name" id="name" value=`${userName}` required)
                     div(class="inputs") 
                         label(for="phone")="Novo Telefone" 
-                        input(type="text" name="phone" id="phone" required)
+                        input(type="text" name="phone" id="phone" value=`${userPhone}` required)
                     div(class="inputs_button") 
                         button(type="submit")=btn1 
