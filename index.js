@@ -44,12 +44,15 @@ app.get("/users-delete/:id", (req, res) => {
 });
 
 app.get("/users-edit/:id", (req, res) => {
+let index = users.findIndex((i) => i.id === req.params.id);
   res.render("userEdit", {
     title: "Edit user",
     users: users,
     message: `Editar usuario`,
     btn1: `Confirm`,
-    userId: req.params.id
+    userId: req.params.id,
+    userName: users[index].name,
+    userPhone: users[index].phone
   });
 });
 
