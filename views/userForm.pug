@@ -1,6 +1,6 @@
 html 
     head 
-        link(type="text/css" rel="stylesheet", href="userForm.css")
+        link(type="text/css" rel="stylesheet", href="/userForm.css")
         title=title 
     body 
         div(class="center")
@@ -8,12 +8,12 @@ html
                 h1
                     message=message
             div(class="form")        
-                form(action="/users-form" method="POST")
+                form(action=met method="POST")
                     div(class="inputs") 
                         label(for="name")="Nome"
-                        input(type="text" name="name" id="name" required)
+                        input(type="text" name="name" id="name" value=userName required)
                     div(class="inputs") 
                         label(for="phone")="Telefone" 
-                        input(type="text" name="phone" id="phone" required)
+                        input(type="text" name="phone" id="phone" value=userPhone required)
                     div(class="inputs_button") 
                         button(type="submit")=btn1 

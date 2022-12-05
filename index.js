@@ -12,15 +12,16 @@ app.use(express.static(__dirname + "/views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/users-form", (req, res) => {
+app.get("/", (req, res) => {
   res.render("userForm", {
     title: "Users",
     message: "Adicione um Usuario",
     btn1: "Enviar",
+    met: "/"
   });
 });
 
-app.post("/users-form", (req, res) => {
+app.post("/", (req, res) => {
   req.body.id = uuidv4();
   var value = req.body;
   users.push(value);
@@ -45,14 +46,15 @@ app.get("/users-delete/:id", (req, res) => {
 
 app.get("/users-edit/:id", (req, res) => {
 let index = users.findIndex((i) => i.id === req.params.id);
-  res.render("userEdit", {
+  res.render("userForm", {
     title: "Edit user",
     users: users,
     message: `Editar usuario`,
     btn1: `Confirm`,
     userId: req.params.id,
     userName: users[index].name,
-    userPhone: users[index].phone
+    userPhone: users[index].phone,
+    met: `/users-edit/${req.params.id}`
   });
 });
 
