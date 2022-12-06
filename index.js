@@ -55,8 +55,15 @@ app.get("/users-list", (req, res) => {
 });
 
 app.get("/users-delete/:id", (req, res) => {
-  let index = users.findIndex((i) => i.id === req.params.id);
-  users.splice(index, 1);
+  let index = data.findIndex((i) => i.id === req.params.id);
+  data.splice(index, 1);
+  let userList = JSON.stringify(data)
+  fs.writeFile('./data.json', userList, err => {
+    if (err) {
+      console.error(err);
+    }
+  });
+
   res.redirect("/users-list");
 });
 
