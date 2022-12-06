@@ -9,9 +9,6 @@ var data = require("./data.json");
 data = fs.readFileSync("./data.json", { encoding: "utf8", flag: "r" });
 data = JSON.parse(data);
 
-var users = [];
-// var userData = ""
-
 app.set("views", "./views");
 app.set("view engine", "pug");
 
