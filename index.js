@@ -4,8 +4,10 @@ const port = 5555;
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs")
+var data = require("./data.json")
 var users = [];
 var userData = ""
+var userList = ""
 
 app.set("views", "./views");
 app.set("view engine", "pug");
@@ -36,11 +38,12 @@ app.post("/users-form", (req, res) => {
 });
 
 app.get("/users-list", (req, res) => {
-  fs.readFile
+  userList = fs.readFileSync('./data.json', {encoding:'utf8', flag:'r'});
+  userList = JSON.parse(userList)
   res.render("index", {
     title: "Users",
     message: "Lista de usuarios",
-    data: users,
+    data: userList,
     btn1: "edit",
     btn2: "delete",
   });
