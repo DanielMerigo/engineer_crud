@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 
 var users = [];
+
 app.set("views", "./views");
 app.set("view engine", "pug");
 
@@ -12,19 +13,18 @@ app.use(express.static(__dirname + "/views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
+app.get("/users-form", (req, res) => {
   res.render("userForm", {
     title: "Users",
     message: "Adicione um Usuario",
     btn1: "Enviar",
-    met: "/"
+    rote: "/users-form"
   });
 });
 
-app.post("/", (req, res) => {
+app.post("/users-form", (req, res) => {
   req.body.id = uuidv4();
-  var value = req.body;
-  users.push(value);
+  users.push(req.body);
   res.redirect("/users-list");
 });
 
@@ -54,7 +54,7 @@ let index = users.findIndex((i) => i.id === req.params.id);
     userId: req.params.id,
     userName: users[index].name,
     userPhone: users[index].phone,
-    met: `/users-edit/${req.params.id}`
+    rote: `/users-edit/${req.params.id}`
   });
 });
 
