@@ -27,8 +27,8 @@ app.get("/users-form", (req, res) => {
 
 app.post("/users-form", (req, res) => {
   req.body.id = uuidv4();
+  req.body.childrens = [];
   data.push(req.body);
-  // users.push(req.body);
   let userData = JSON.stringify(data);
   fs.writeFile("./data.json", userData, (err) => {
     if (err) {
@@ -39,10 +39,7 @@ app.post("/users-form", (req, res) => {
 });
 
 app.get("/users-list", (req, res) => {
-  let userList = fs.readFileSync("./data.json", {
-    encoding: "utf8",
-    flag: "r",
-  });
+  let userList = fs.readFileSync("./data.json", {encoding: "utf8",flag: "r",});
   userList = JSON.parse(userList);
   res.render("index", {
     title: "Users",
@@ -78,6 +75,31 @@ app.get("/users-edit/:id", (req, res) => {
     userPhone: userList[index].phone,
     rote: `/users-edit/${req.params.id}`,
   });
+});
+
+app.get("/user-chieldrens/:id", (req, res) => {
+  let index = data.findIndex((i) => i.id === req.params.id);
+  let userList = data;
+
+  res.render("childrenForm", {
+    title: "Add children",
+    message: `Adicionar filho(a) para ${userList[index].name}`,
+    btn1: `Confirm`,
+    rote: `/user-childrens/${req.params.id}`,
+    userId: req.params.id
+  });
+});
+
+app.post("/user-childrens/:id", (req, res) => {
+  let index = data.findIndex((i) => i.id === req.params.id);
+  data[index].childrens.push({children_name: req.body.name, children_age: req.body.age})
+
+  fs.writeFile("./data.json", JSON.stringify(data), (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+  res.redirect("/users-list");
 });
 
 app.post("/users-edit/:id", (req, res) => {
