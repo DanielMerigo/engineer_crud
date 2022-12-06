@@ -3,11 +3,11 @@ const app = express();
 const port = 5555;
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
-const fs = require("fs")
-var data = require("./data.json")
+const fs = require("fs");
+var data = require("./data.json");
 
-data = fs.readFileSync('./data.json', {encoding:'utf8', flag:'r'})
-data = JSON.parse(data)
+data = fs.readFileSync("./data.json", { encoding: "utf8", flag: "r" });
+data = JSON.parse(data);
 
 var users = [];
 // var userData = ""
@@ -24,16 +24,16 @@ app.get("/users-form", (req, res) => {
     title: "Users",
     message: "Adicione um Usuario",
     btn1: "Enviar",
-    rote: "/users-form"
+    rote: "/users-form",
   });
 });
 
 app.post("/users-form", (req, res) => {
   req.body.id = uuidv4();
-  data.push(req.body)
+  data.push(req.body);
   // users.push(req.body);
-   let userData = JSON.stringify(data)
-  fs.writeFile('./data.json', userData, err => {
+  let userData = JSON.stringify(data);
+  fs.writeFile("./data.json", userData, (err) => {
     if (err) {
       console.error(err);
     }
@@ -42,8 +42,11 @@ app.post("/users-form", (req, res) => {
 });
 
 app.get("/users-list", (req, res) => {
-  let userList = fs.readFileSync('./data.json', {encoding:'utf8', flag:'r'});
-  userList = JSON.parse(userList)
+  let userList = fs.readFileSync("./data.json", {
+    encoding: "utf8",
+    flag: "r",
+  });
+  userList = JSON.parse(userList);
   res.render("index", {
     title: "Users",
     message: "Lista de usuarios",
@@ -51,14 +54,13 @@ app.get("/users-list", (req, res) => {
     btn1: "edit",
     btn2: "delete",
   });
-  
 });
 
 app.get("/users-delete/:id", (req, res) => {
   let index = data.findIndex((i) => i.id === req.params.id);
   data.splice(index, 1);
-  let userList = JSON.stringify(data)
-  fs.writeFile('./data.json', userList, err => {
+  let userList = JSON.stringify(data);
+  fs.writeFile("./data.json", userList, (err) => {
     if (err) {
       console.error(err);
     }
@@ -68,27 +70,31 @@ app.get("/users-delete/:id", (req, res) => {
 });
 
 app.get("/users-edit/:id", (req, res) => {
-let index = users.findIndex((i) => i.id === req.params.id);
+  let index = data.findIndex((i) => i.id === req.params.id);
+  let userList = data;
   res.render("userForm", {
     title: "Edit user",
-    users: users,
     message: `Editar usuario`,
     btn1: `Confirm`,
     userId: req.params.id,
-    userName: users[index].name,
-    userPhone: users[index].phone,
-    rote: `/users-edit/${req.params.id}`
+    userName: userList[index].name,
+    userPhone: userList[index].phone,
+    rote: `/users-edit/${req.params.id}`,
   });
 });
 
 app.post("/users-edit/:id", (req, res) => {
-  let index = users.findIndex((i) => i.id === req.params.id);
-  users[index].name = req.body.name;
-  users[index].phone = req.body.phone;
+  let index = data.findIndex((i) => i.id === req.params.id);
+  data[index].name = req.body.name;
+  data[index].phone = req.body.phone;
+  fs.writeFile("./data.json", JSON.stringify(data), (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
   res.redirect("/users-list");
 });
 
 app.listen(port, () => {
   console.log(`Server is online :) \nport: ${port}`);
 });
-;
