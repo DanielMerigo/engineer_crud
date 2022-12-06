@@ -3,8 +3,9 @@ const app = express();
 const port = 5555;
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
-
+const fs = require("fs")
 var users = [];
+var userData = ""
 
 app.set("views", "./views");
 app.set("view engine", "pug");
@@ -25,10 +26,17 @@ app.get("/users-form", (req, res) => {
 app.post("/users-form", (req, res) => {
   req.body.id = uuidv4();
   users.push(req.body);
+  userData = JSON.stringify(users)
+  fs.writeFile('./data.json', userData, err => {
+    if (err) {
+      console.error(err);
+    }
+  });
   res.redirect("/users-list");
 });
 
 app.get("/users-list", (req, res) => {
+  fs.readFile
   res.render("index", {
     title: "Users",
     message: "Lista de usuarios",
@@ -36,6 +44,7 @@ app.get("/users-list", (req, res) => {
     btn1: "edit",
     btn2: "delete",
   });
+  
 });
 
 app.get("/users-delete/:id", (req, res) => {
