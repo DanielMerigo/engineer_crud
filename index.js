@@ -5,9 +5,12 @@ const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs")
 var data = require("./data.json")
+
+data = fs.readFileSync('./data.json', {encoding:'utf8', flag:'r'})
+data = JSON.parse(data)
+
 var users = [];
-var userData = ""
-var userList = ""
+// var userData = ""
 
 app.set("views", "./views");
 app.set("view engine", "pug");
@@ -27,8 +30,9 @@ app.get("/users-form", (req, res) => {
 
 app.post("/users-form", (req, res) => {
   req.body.id = uuidv4();
-  users.push(req.body);
-  userData = JSON.stringify(users)
+  data.push(req.body)
+  // users.push(req.body);
+   let userData = JSON.stringify(data)
   fs.writeFile('./data.json', userData, err => {
     if (err) {
       console.error(err);
@@ -38,7 +42,7 @@ app.post("/users-form", (req, res) => {
 });
 
 app.get("/users-list", (req, res) => {
-  userList = fs.readFileSync('./data.json', {encoding:'utf8', flag:'r'});
+  let userList = fs.readFileSync('./data.json', {encoding:'utf8', flag:'r'});
   userList = JSON.parse(userList)
   res.render("index", {
     title: "Users",
