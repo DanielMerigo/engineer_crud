@@ -68,8 +68,7 @@ module.exports = {
     });
   },
   renderEditChildrens: (req, res) => {
-    let father = data.find((user) => user.id == req.params.id);
-    let son = father.childrens.find((children) => children.children_id == req.params.children_id);
+    let son = usersModel.getSon(req)
     res.render("childrenForm", {
       title: "Edit children",
       message: `Editar filho`,
@@ -91,8 +90,7 @@ module.exports = {
     res.redirect("/users-list");
   },
   editChildren: (req, res) => {
-    let father = data.find((user) => user.id == req.params.id);
-    let son = father.childrens.find(children => children.children_id == req.params.children_id);
+    let son = usersModel.getSon(req)
     son.children_name = req.body.name;
     son.children_age = req.body.age;
     userList = JSON.stringify(data);
