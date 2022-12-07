@@ -11,9 +11,10 @@ html
             each val, index in data
                     div(class="center") 
                         ul
+                            h3='Usuario '
                             p=`Nome: ${val.name}`
                             p=`Telefone: ${val.phone}`
-                                h4='Filhos: '
+                                h3='Filhos '
                                 if val.childrens == 0
                                     p=`O usuario ainda não tem filhos cadastrados :(`
                                 else
@@ -26,7 +27,6 @@ html
                                                     a(class=`edit` href=`/edit-children/${val.id}/${chil.children_id}`) Editar
                                                         a(class="delete" href=`/delete-children/${val.id}/${chil.children_id}`) 
                                                             i.fa.fa-trash 
-                                                    //- a(class=`delete` href=`/delete-children/${val.id}/${chil.children_id}`) Deletar
                             div(class="btn")
                                 a(class=`edit` href=`/users-edit/${val.id}`) Editar 
                                 a(class=`edit` href=`/user-childrens/${val.id}`) Adicionar filhos
