@@ -2,6 +2,8 @@ html
     head
         title=title
         link(type="text/css" rel="stylesheet", href="style.css")
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     body
         div 
             div(class="center_h1")   
@@ -21,8 +23,10 @@ html
                                                 p=`Nome: ${chil.children_name}`
                                                 p=`Idade: ${chil.children_age}`
                                                 div(class="childrens_btn")
-                                                    a(class=`edit` href=`/edit-children/${val.id}/${chil.children_id}`) Editar 
-                                                    a(class=`delete` href=`/`) Deletar
+                                                    a(class=`edit` href=`/edit-children/${val.id}/${chil.children_id}`) Editar
+                                                        a(class="delete" href=`/delete-children/${val.id}/${chil.children_id}`) 
+                                                            i.fa.fa-trash 
+                                                    //- a(class=`delete` href=`/delete-children/${val.id}/${chil.children_id}`) Deletar
                             div(class="btn")
                                 a(class=`edit` href=`/users-edit/${val.id}`) Editar 
                                 a(class=`edit` href=`/user-childrens/${val.id}`) Adicionar filhos

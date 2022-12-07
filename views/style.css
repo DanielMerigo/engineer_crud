@@ -62,12 +62,13 @@ ul {
 .childrens_center{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-
+  justify-content: flex-start;
 }
 
 .childrens_btn {
   display: flex;
+  justify-content: space-between;
+
 }
 
 .childrens{
@@ -77,4 +78,9 @@ ul {
   padding: 10px;
   border-radius: 12px;
   margin-top: 30px;
+}
+
+.fa.fa-trash {
+  color: white;
+  
 }

@@ -130,6 +130,20 @@ app.post("/edit-children/:id/:children_id", (req, res) => {
   res.redirect("/users-list");
 });
 
+app.get("/delete-children/:id/:children_id", (req, res) => {
+  let fatherIndex = data.findIndex(i => i.id == req.params.id)
+  let sonIndex = data[fatherIndex].childrens.findIndex(i => i.children_id == req.params.children_id)
+  data[fatherIndex].childrens.splice(sonIndex, 1)
+  userList = JSON.stringify(data);
+
+  fs.writeFile("./data.json", userList, (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+  res.redirect("/users-list");
+});
+
 
 
 app.post("/users-edit/:id", (req, res) => {
