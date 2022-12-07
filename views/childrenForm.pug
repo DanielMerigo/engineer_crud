@@ -9,13 +9,13 @@ html
                 h1
                     message=message
             div(class="form")        
-                form(action=rote method="POST")
+                form(action=route method="POST")
                     div(class="inputs") 
                         label(for="name")="Nome do filho"
-                        input(type="text" name="name" id="name" required)
+                        input(type="text" name="name" id="name" value=childrenName  required)
                     div(class="inputs") 
                         label(for="age")="Idade do filho" 
-                        input(type="number" name="age" id="age" required)
+                        input(type="number" name="age" id="age" value=childrenAge required)
                     div(class="inputs_button") 
                         button(type="submit")=btn1 
                 

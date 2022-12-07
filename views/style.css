@@ -62,7 +62,12 @@ ul {
 .childrens_center{
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 
+}
+
+.childrens_btn {
+  display: flex;
 }
 
 .childrens{

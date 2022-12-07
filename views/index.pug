@@ -20,9 +20,12 @@ html
                                             div(class="childrens")
                                                 p=`Nome: ${chil.children_name}`
                                                 p=`Idade: ${chil.children_age}`
+                                                div(class="childrens_btn")
+                                                    a(class=`edit` href=`/edit-children/${val.id}/${chil.children_id}`) Editar 
+                                                    a(class=`delete` href=`/`) Deletar
                             div(class="btn")
                                 a(class=`edit` href=`/users-edit/${val.id}`) Editar 
-                                a(class=`edit` href=`/user-chieldrens/${val.id}`) Adicionar filhos
+                                a(class=`edit` href=`/user-childrens/${val.id}`) Adicionar filhos
                                 a(class=`delete` href=`/users-delete/${val.id}`) Deletar
         div(class="center")                       
             a(class='return' href='/users-form') Adicionar mais usuarios
