@@ -7,13 +7,22 @@ html
             div(class="center_h1")   
                 h1=message
             each val, index in data
-                div(class="center")
-                    ul
-                        p=`Nome: ${val.name}`
-                        p=`Telefone: ${val.phone}`
-                        div(class="btn")
-                            a(class=`edit` href=`/users-edit/${val.id}`) Editar 
-                            a(class=`edit` href=`/user-chieldrens/${val.id}`) Adicionar filhos
-                            a(class=`delete` href=`/users-delete/${val.id}`) Deletar
+                    div(class="center") 
+                        ul
+                            p=`Nome: ${val.name}`
+                            p=`Telefone: ${val.phone}`
+                                h4='Filhos: '
+                                if val.childrens == 0
+                                    p=`O usuario ainda não tem filhos cadastrados :(`
+                                else
+                                    div(class="childrens_center")
+                                        each chil in val.childrens
+                                            div(class="childrens")
+                                                p=`Nome: ${chil.children_name}`
+                                                p=`Idade: ${chil.children_age}`
+                            div(class="btn")
+                                a(class=`edit` href=`/users-edit/${val.id}`) Editar 
+                                a(class=`edit` href=`/user-chieldrens/${val.id}`) Adicionar filhos
+                                a(class=`delete` href=`/users-delete/${val.id}`) Deletar
         div(class="center")                       
             a(class='return' href='/users-form') Adicionar mais usuarios
