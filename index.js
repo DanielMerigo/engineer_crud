@@ -4,7 +4,7 @@ const port = 5555;
 const bodyParser = require("body-parser");
 const fs = require("fs");
 var data = require("./data.json");
-const usersController =  require("./controllers/users")
+const controller =  require("./controllers/users")
 
 data = fs.readFileSync("./data.json", { encoding: "utf8", flag: "r" });
 data = JSON.parse(data);
@@ -16,27 +16,27 @@ app.use(express.static(__dirname + "/views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/users-form", usersController.renderUsersForm);
+app.get("/users-form", controller.renderUsersForm);
 
-app.post("/users-form", usersController.insertUser);
+app.post("/users-form", controller.insertUser);
 
-app.get("/users-list", usersController.showUsers)
+app.get("/users-list", controller.showUsers)
 
-app.get("/users-delete/:id", usersController.deleteUser);
+app.get("/users-delete/:id", controller.deleteUser);
 
-app.get("/users-edit/:id", usersController.renderUsersEditForm);
+app.get("/users-edit/:id", controller.renderUsersEditForm);
 
-app.get("/user-childrens/:id", usersController.renderChildrenForm);
+app.get("/user-childrens/:id", controller.renderChildrenForm);
 
-app.post("/user-childrens/:id", usersController.insertChildren);
+app.post("/user-childrens/:id", controller.insertChildren);
 
-app.get("/edit-children/:id/:children_id", usersController.renderEditChildrens);
+app.get("/edit-children/:id/:children_id", controller.renderEditChildrens);
 
-app.post("/edit-children/:id/:children_id", usersController.editChildren);
+app.post("/edit-children/:id/:children_id", controller.editChildren);
 
-app.get("/delete-children/:id/:children_id", usersController.deleteChildren);
+app.get("/delete-children/:id/:children_id", controller.deleteChildren);
 
-app.post("/users-edit/:id", usersController.editUser);
+app.post("/users-edit/:id", controller.editUser);
 
 app.listen(port, () => {
   console.log(`Server is online :) \nport: ${port}`);

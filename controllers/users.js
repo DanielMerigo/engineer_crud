@@ -1,6 +1,6 @@
 const data = require("../data.json");
 const { v4: uuidv4 } = require("uuid");
-const usersModel = require("../models/users");
+const model = require("../models/users");
 
 module.exports = {
   renderUsersForm: (req, res) => {
@@ -16,11 +16,11 @@ module.exports = {
     req.body.childrens = [];
     data.push(req.body);
     userList = JSON.stringify(data);
-    usersModel.write(userList)
+    model.write(userList)
     res.redirect("/users-list");
   },
   showUsers: (req, res) => {
-    let userList = usersModel.list();
+    let userList = model.list();
     res.render("index", {
       title: "Users",
       message: "Lista de usuarios",
@@ -47,14 +47,14 @@ module.exports = {
     user.name = req.body.name;
     user.phone = req.body.phone;
     userList = JSON.stringify(data);
-    usersModel.write(userList)
+    model.write(userList)
     res.redirect("/users-list");
   },
   deleteUser: (req, res) => {
     let index = data.findIndex((i) => i.id === req.params.id);
     data.splice(index, 1);
     let userList = JSON.stringify(data);
-    usersModel.write(userList)
+    model.write(userList)
     res.redirect("/users-list");
   },
 
@@ -68,7 +68,7 @@ module.exports = {
     });
   },
   renderEditChildrens: (req, res) => {
-    let son = usersModel.getSon(req)
+    let son = model.getSon(req)
     res.render("childrenForm", {
       title: "Edit children",
       message: `Editar filho`,
@@ -86,15 +86,15 @@ module.exports = {
       children_id: uuidv4(),
     });
     userList = JSON.stringify(data);
-    usersModel.write(userList)
+    model.write(userList)
     res.redirect("/users-list");
   },
   editChildren: (req, res) => {
-    let son = usersModel.getSon(req)
+    let son = model.getSon(req)
     son.children_name = req.body.name;
     son.children_age = req.body.age;
     userList = JSON.stringify(data);
-    usersModel.write(userList)
+    model.write(userList)
     res.redirect("/users-list");
   },
   deleteChildren: (req, res) => {
@@ -102,7 +102,7 @@ module.exports = {
     let sonIndex = father.childrens.findIndex(i => i.children_id == req.params.children_id);
     father.childrens.splice(sonIndex, 1);
     userList = JSON.stringify(data);
-    usersModel.write(userList)
+    model.write(userList)
     res.redirect("/users-list");
   },
 };
