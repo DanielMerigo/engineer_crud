@@ -39,7 +39,10 @@ app.post("/users-form", (req, res) => {
 });
 
 app.get("/users-list", (req, res) => {
-  let userList = fs.readFileSync("./data.json", {encoding: "utf8",flag: "r",});
+  let userList = fs.readFileSync("./data.json", {
+    encoding: "utf8",
+    flag: "r",
+  });
   userList = JSON.parse(userList);
   res.render("index", {
     title: "Users",
@@ -64,63 +67,56 @@ app.get("/users-delete/:id", (req, res) => {
 });
 
 app.get("/users-edit/:id", (req, res) => {
-  let index = data.findIndex((i) => i.id === req.params.id);
-  let userList = data;
+  let user = data.find((i) => i.id === req.params.id);
   res.render("userForm", {
     title: "Edit user",
     message: `Editar usuario`,
     btn1: `Confirm`,
     userId: req.params.id,
-    userName: userList[index].name,
-    userPhone: userList[index].phone,
+    userName: user.name,
+    userPhone: user.phone,
     route: `/users-edit/${req.params.id}`,
   });
 });
 
 app.get("/user-childrens/:id", (req, res) => {
-  let index = data.findIndex((i) => i.id === req.params.id);
-  //usar find()
-  let userList = data;
-
+  let user = data.find((i) => i.id === req.params.id);
   res.render("childrenForm", {
     title: "Add children",
-    message: `Adicionar filho(a) para ${userList[index].name}`,
+    message: `Adicionar filho(a) para ${user.name}`,
     btn1: `Confirm`,
     route: `/user-childrens/${req.params.id}`,
-    userId: req.params.id
   });
 });
 
 app.post("/user-childrens/:id", (req, res) => {
-  let index = data.findIndex((i) => i.id === req.params.id);
-  data[index].childrens.push({children_name: req.body.name, children_age: req.body.age, children_id: uuidv4()})
-
-  fs.writeFile("./data.json", JSON.stringify(data), (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
+  insertChildren(req)
   res.redirect("/users-list");
 });
 
+
 app.get("/edit-children/:id/:children_id", (req, res) => {
-  let father = data.find((user) => user.id == req.params.id)
-  let son = father.childrens.find(children => children.children_id == req.params.children_id)
+  let father = data.find((user) => user.id == req.params.id);
+  let son = father.childrens.find(
+    (children) => children.children_id == req.params.children_id
+  );
   res.render("childrenForm", {
     title: "Edit children",
     message: `Editar filho`,
     btn1: `Confirm`,
     route: `/edit-children/${req.params.id}/${req.params.children_id}`,
     childrenName: son.children_name,
-    childrenAge: son.children_age
+    childrenAge: son.children_age,
   });
 });
 
 app.post("/edit-children/:id/:children_id", (req, res) => {
-  let father = data.find((user) => user.id == req.params.id)
-  let son = father.childrens.find(children => children.children_id == req.params.children_id)
-  son.children_name = req.body.name
-  son.children_age = req.body.age
+  let father = data.find((user) => user.id == req.params.id);
+  let son = father.childrens.find(
+    (children) => children.children_id == req.params.children_id
+  );
+  son.children_name = req.body.name;
+  son.children_age = req.body.age;
 
   fs.writeFile("./data.json", JSON.stringify(data), (err) => {
     if (err) {
@@ -131,9 +127,9 @@ app.post("/edit-children/:id/:children_id", (req, res) => {
 });
 
 app.get("/delete-children/:id/:children_id", (req, res) => {
-  let fatherIndex = data.findIndex(i => i.id == req.params.id)
-  let sonIndex = data[fatherIndex].childrens.findIndex(i => i.children_id == req.params.children_id)
-  data[fatherIndex].childrens.splice(sonIndex, 1)
+  let father = data.find(i => i.id == req.params.id)
+  let sonIndex = father.childrens.findIndex(i => i.children_id == req.params.children_id);
+  father.childrens.splice(sonIndex, 1);
   userList = JSON.stringify(data);
 
   fs.writeFile("./data.json", userList, (err) => {
@@ -143,8 +139,6 @@ app.get("/delete-children/:id/:children_id", (req, res) => {
   });
   res.redirect("/users-list");
 });
-
-
 
 app.post("/users-edit/:id", (req, res) => {
   let index = data.findIndex((i) => i.id === req.params.id);
@@ -157,6 +151,20 @@ app.post("/users-edit/:id", (req, res) => {
   });
   res.redirect("/users-list");
 });
+
+function insertChildren(req) {
+  let user = data.find((i) => i.id === req.params.id);
+  user.childrens.push({
+    children_name: req.body.name,
+    children_age: req.body.age,
+    children_id: uuidv4(),
+  });
+  fs.writeFile("./data.json", JSON.stringify(data), (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
 
 app.listen(port, () => {
   console.log(`Server is online :) \nport: ${port}`);
