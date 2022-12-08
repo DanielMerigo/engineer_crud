@@ -24,7 +24,8 @@ html
                                                 p=`Nome: ${chil.children_name}`
                                                 p=`Idade: ${chil.children_age}`
                                                 div(class="childrens_btn")
-                                                    a(class=`edit` href=`/edit-children/${val.id}/${chil.children_id}`) Editar
+                                                        a(class=`edit` href=`/edit-children/${val.id}/${chil.children_id}`)
+                                                            i.fa.fa-pencil
                                                         a(class="delete" href=`/delete-children/${val.id}/${chil.children_id}`) 
                                                             i.fa.fa-trash 
                             div(class="btn")
