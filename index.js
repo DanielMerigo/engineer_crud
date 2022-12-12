@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const port = 5555;
 const bodyParser = require("body-parser");
-const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 var data = require("./data.json");
+const controller =  require("./controllers/users")
 
 data = fs.readFileSync("./data.json", { encoding: "utf8", flag: "r" });
 data = JSON.parse(data);
@@ -16,81 +16,27 @@ app.use(express.static(__dirname + "/views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/users-form", (req, res) => {
-  res.render("userForm", {
-    title: "Users",
-    message: "Adicione um Usuario",
-    btn1: "Enviar",
-    rote: "/users-form",
-  });
-});
+app.get("/users-form", controller.renderUsersForm);
 
-app.post("/users-form", (req, res) => {
-  req.body.id = uuidv4();
-  data.push(req.body);
-  // users.push(req.body);
-  let userData = JSON.stringify(data);
-  fs.writeFile("./data.json", userData, (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
-  res.redirect("/users-list");
-});
+app.post("/users-form", controller.insertUser);
 
-app.get("/users-list", (req, res) => {
-  let userList = fs.readFileSync("./data.json", {
-    encoding: "utf8",
-    flag: "r",
-  });
-  userList = JSON.parse(userList);
-  res.render("index", {
-    title: "Users",
-    message: "Lista de usuarios",
-    data: userList,
-    btn1: "edit",
-    btn2: "delete",
-  });
-});
+app.get("/users-list", controller.showUsers)
 
-app.get("/users-delete/:id", (req, res) => {
-  let index = data.findIndex((i) => i.id === req.params.id);
-  data.splice(index, 1);
-  let userList = JSON.stringify(data);
-  fs.writeFile("./data.json", userList, (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
+app.get("/users-delete/:id", controller.deleteUser);
 
-  res.redirect("/users-list");
-});
+app.get("/users-edit/:id", controller.renderUsersEditForm);
 
-app.get("/users-edit/:id", (req, res) => {
-  let index = data.findIndex((i) => i.id === req.params.id);
-  let userList = data;
-  res.render("userForm", {
-    title: "Edit user",
-    message: `Editar usuario`,
-    btn1: `Confirm`,
-    userId: req.params.id,
-    userName: userList[index].name,
-    userPhone: userList[index].phone,
-    rote: `/users-edit/${req.params.id}`,
-  });
-});
+app.get("/user-childrens/:id", controller.renderChildrenForm);
 
-app.post("/users-edit/:id", (req, res) => {
-  let index = data.findIndex((i) => i.id === req.params.id);
-  data[index].name = req.body.name;
-  data[index].phone = req.body.phone;
-  fs.writeFile("./data.json", JSON.stringify(data), (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
-  res.redirect("/users-list");
-});
+app.post("/user-childrens/:id", controller.insertChildren);
+
+app.get("/edit-children/:id/:children_id", controller.renderEditChildrens);
+
+app.post("/edit-children/:id/:children_id", controller.editChildren);
+
+app.get("/delete-children/:id/:children_id", controller.deleteChildren);
+
+app.post("/users-edit/:id", controller.editUser);
 
 app.listen(port, () => {
   console.log(`Server is online :) \nport: ${port}`);
