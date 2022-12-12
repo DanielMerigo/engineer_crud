@@ -1,5 +1,3 @@
-const data = require("../data.json");
-const { v4: uuidv4 } = require("uuid");
 const model = require("../models/users");
 
 module.exports = {
@@ -12,10 +10,7 @@ module.exports = {
     });
   },
   insertUser: (req, res) => {
-    req.body.id = uuidv4();
-    req.body.childrens = [];
-    data.push(req.body);
-    userList = JSON.stringify(data);
+    let userList = model.createUser(req)
     model.write(userList)
     res.redirect("/users-list");
   },
@@ -31,7 +26,7 @@ module.exports = {
   },
 
   renderUsersEditForm: (req, res) => {
-    let user = data.find((i) => i.id === req.params.id);
+    let user = model.getUser(req)
     res.render("userForm", {
       title: "Edit user",
       message: `Editar usuario`,
@@ -43,23 +38,18 @@ module.exports = {
     });
   },
   editUser: (req, res) => {
-    let user = data.find((i) => i.id === req.params.id);
-    user.name = req.body.name;
-    user.phone = req.body.phone;
-    userList = JSON.stringify(data);
+    let userList = model.editUser(req)
     model.write(userList)
     res.redirect("/users-list");
   },
   deleteUser: (req, res) => {
-    let index = data.findIndex((i) => i.id === req.params.id);
-    data.splice(index, 1);
-    let userList = JSON.stringify(data);
+    let userList = model.userDelete(req)
     model.write(userList)
     res.redirect("/users-list");
   },
 
   renderChildrenForm: (req, res) => {
-    let user = data.find((i) => i.id === req.params.id);
+    let user = model.getUser(req)
     res.render("childrenForm", {
       title: "Add children",
       message: `Adicionar filho(a) para ${user.name}`,
@@ -79,29 +69,17 @@ module.exports = {
     });
   },
   insertChildren: (req, res) => {
-    let user = data.find((i) => i.id === req.params.id);
-    user.childrens.push({
-      children_name: req.body.name,
-      children_age: req.body.age,
-      children_id: uuidv4(),
-    });
-    userList = JSON.stringify(data);
+    let userList = model.createChildren(req)
     model.write(userList)
     res.redirect("/users-list");
   },
   editChildren: (req, res) => {
-    let son = model.getSon(req)
-    son.children_name = req.body.name;
-    son.children_age = req.body.age;
-    userList = JSON.stringify(data);
+    let userList = model.editChildren(req)
     model.write(userList)
     res.redirect("/users-list");
   },
   deleteChildren: (req, res) => {
-    let father = data.find((i) => i.id == req.params.id);
-    let sonIndex = father.childrens.findIndex(i => i.children_id == req.params.children_id);
-    father.childrens.splice(sonIndex, 1);
-    userList = JSON.stringify(data);
+    let userList = model.deleteChildren(req)
     model.write(userList)
     res.redirect("/users-list");
   },
