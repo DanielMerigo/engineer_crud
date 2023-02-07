@@ -61,7 +61,7 @@ module.exports = {
     });
   },
   renderEditChildrens: async (req, res) => {
-    let child = await modelInstance.getSon(req.params);
+    let child = await modelInstance.getChild(req.params);
     res.render("childrenForm", {
       title: "Edit children",
       message: `Editar filho`,

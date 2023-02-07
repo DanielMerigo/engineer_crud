@@ -9,7 +9,7 @@ module.exports = class Users {
     let userList = await this.collection.find({}).toArray();
     return userList;
   }
-  async getSon(params) {
+  async getChild(params) {
     const result = await this.collection
       .aggregate([
         {
