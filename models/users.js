@@ -1,75 +1,90 @@
-const fs = require("fs");
-const data = require("../data.json");
-const { v4: uuidv4 } = require("uuid");
+const { ObjectId } = require("mongodb");
 
 module.exports = class Users {
-  static list() {
-    let userList = fs.readFileSync("./data.json", {
-      encoding: "utf8",
-      flag: "r",
-    });
-    return JSON.parse(userList);
+  constructor(dbConnection) {
+    const users = dbConnection.collection("users");
+    this.collection = users;
   }
-  static write(userList) {
-    fs.writeFile("./data.json", userList, (err) => {
-      if (err) {
-        console.error(err);
+  async list() {
+    let userList = await this.collection.find({}).toArray();
+    return userList;
+  }
+  async getSon(params) {
+    const result = await this.collection
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(params.id),
+          },
+        },
+        {
+          $unwind: "$childrens",
+        },
+        {
+          $match: {
+            "childrens.children_id": new ObjectId(params.children_id),
+          },
+        },
+        {
+          $project: {
+            children_id: "$childrens.children_id",
+            children_name: "$childrens.children_name",
+            children_age: "$childrens.children_age",
+          },
+        },
+      ])
+      .toArray();
+    return result;
+  }
+  async createUser(userData) {
+    userData.childrens = [];
+    await this.collection.insertOne(userData);
+  }
+  async getUser(userId) {
+    let user = await this.collection.findOne({ _id: new ObjectId(userId) });
+    return user;
+  }
+  async editUser(userId, userData) {
+    await this.collection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { name: userData.name, phone: userData.phone } }
+    );
+  }
+  async userDelete(userId) {
+    await this.collection.deleteOne({ _id: new ObjectId(userId) });
+  }
+  async createChildren(userId, userData) {
+    await this.collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $push: {
+          childrens: {
+            children_id: new ObjectId(),
+            children_name: userData.name,
+            children_age: userData.age,
+          },
+        },
       }
-    });
+    );
   }
-  static getSon(req) {
-    let user = data.find((user) => user.id == req.params.id);
-    let son = user.childrens.find(c => c.children_id == req.params.children_id);
-    return son
+  async editChildren(params, childrenBody) {
+    await this.collection.findOneAndUpdate(
+      {
+        _id: new ObjectId(params.id),
+        "childrens.children_id": new ObjectId(params.children_id),
+      },
+      {
+        $set: {
+          "childrens.$.children_name": childrenBody.name,
+          "childrens.$.children_age": childrenBody.age,
+        },
+      }
+    );
   }
-  static createUser(userData) {
-    userData.body.id = uuidv4();
-    userData.body.childrens = [];
-    data.push(userData.body);
-    let userList = JSON.stringify(data);
-    return userList
+  async deleteChildren(params) {
+    await this.collection.updateOne(
+      { _id: new ObjectId(params.id) },
+      { $pull: { childrens: { children_id: new ObjectId(params.children_id) } } }
+    );
   }
-  static getUser(req) {
-    let user = data.find((i) => i.id === req.params.id);
-    return user
-  }
-  static editUser(req) {
-    let user = data.find((i) => i.id === req.params.id);
-    user.name = req.body.name;
-    user.phone = req.body.phone;
-    let userList = JSON.stringify(data);
-    return userList
-  }
-  static userDelete(req) {
-    let index = data.findIndex((i) => i.id === req.params.id);
-    data.splice(index, 1);
-    let userList = JSON.stringify(data);
-    return userList
-  }
-  static createChildren(req) {
-    let user = data.find((i) => i.id === req.params.id);
-    user.childrens.push({
-      children_name: req.body.name,
-      children_age: req.body.age,
-      children_id: uuidv4(),
-    });
-    let userList = JSON.stringify(data);
-    return userList
-  }
-  static editChildren(req) {
-    let user = data.find((user) => user.id == req.params.id);
-    let son = user.childrens.find(c => c.children_id == req.params.children_id);
-    son.children_name = req.body.name;
-    son.children_age = req.body.age;
-    let userList = JSON.stringify(data);
-    return userList
-  }
-  static deleteChildren(req) {
-    let user = data.find((i) => i.id == req.params.id);
-    let sonIndex = user.childrens.findIndex(i => i.children_id == req.params.children_id);
-    user.childrens.splice(sonIndex, 1);
-    let userList = JSON.stringify(data);
-    return userList
-  }
-
 };

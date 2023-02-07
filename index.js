@@ -1,13 +1,8 @@
 const express = require("express");
 const app = express();
-const port = 5555;
+const port = 3333;
 const bodyParser = require("body-parser");
-const fs = require("fs");
-var data = require("./data.json");
-const controller =  require("./controllers/users")
-
-data = fs.readFileSync("./data.json", { encoding: "utf8", flag: "r" });
-data = JSON.parse(data);
+const controller = require("./controllers/users");
 
 app.set("views", "./views");
 app.set("view engine", "pug");

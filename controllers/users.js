@@ -1,5 +1,12 @@
 const model = require("../models/users");
 
+const { MongoClient } = require("mongodb");
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
+const dbConnection = client.db("eureca");
+
+const modelInstance = new model(dbConnection);
+
 module.exports = {
   renderUsersForm: (req, res) => {
     res.render("userForm", {
@@ -10,12 +17,11 @@ module.exports = {
     });
   },
   insertUser: (req, res) => {
-    let userList = model.createUser(req)
-    model.write(userList)
+    modelInstance.createUser(req.body);
     res.redirect("/users-list");
   },
-  showUsers: (req, res) => {
-    let userList = model.list();
+  showUsers: async (req, res) => {
+    let userList = await modelInstance.list();
     res.render("index", {
       title: "Users",
       message: "Lista de usuarios",
@@ -25,8 +31,8 @@ module.exports = {
     });
   },
 
-  renderUsersEditForm: (req, res) => {
-    let user = model.getUser(req)
+  renderUsersEditForm: async (req, res) => {
+    let user = await modelInstance.getUser(req.params.id);
     res.render("userForm", {
       title: "Edit user",
       message: `Editar usuario`,
@@ -37,19 +43,16 @@ module.exports = {
       route: `/users-edit/${req.params.id}`,
     });
   },
-  editUser: (req, res) => {
-    let userList = model.editUser(req)
-    model.write(userList)
+  editUser: async (req, res) => {
+    await modelInstance.editUser(req.params.id, req.body);
     res.redirect("/users-list");
   },
-  deleteUser: (req, res) => {
-    let userList = model.userDelete(req)
-    model.write(userList)
+  deleteUser: async (req, res) => {
+    await modelInstance.userDelete(req.params.id);
     res.redirect("/users-list");
   },
-
-  renderChildrenForm: (req, res) => {
-    let user = model.getUser(req)
+  renderChildrenForm: async (req, res) => {
+    let user = await modelInstance.getUser(req.params.id);
     res.render("childrenForm", {
       title: "Add children",
       message: `Adicionar filho(a) para ${user.name}`,
@@ -57,30 +60,27 @@ module.exports = {
       route: `/user-childrens/${req.params.id}`,
     });
   },
-  renderEditChildrens: (req, res) => {
-    let son = model.getSon(req)
+  renderEditChildrens: async (req, res) => {
+    let child = await modelInstance.getSon(req.params);
     res.render("childrenForm", {
       title: "Edit children",
       message: `Editar filho`,
       btn1: `Confirm`,
       route: `/edit-children/${req.params.id}/${req.params.children_id}`,
-      childrenName: son.children_name,
-      childrenAge: son.children_age,
+      childrenName: child[0].children_name,
+      childrenAge: child[0].children_age,
     });
   },
-  insertChildren: (req, res) => {
-    let userList = model.createChildren(req)
-    model.write(userList)
+  insertChildren: async (req, res) => {
+    await modelInstance.createChildren(req.params.id, req.body);
     res.redirect("/users-list");
   },
-  editChildren: (req, res) => {
-    let userList = model.editChildren(req)
-    model.write(userList)
+  editChildren: async (req, res) => {
+    await modelInstance.editChildren(req.params, req.body);
     res.redirect("/users-list");
   },
-  deleteChildren: (req, res) => {
-    let userList = model.deleteChildren(req)
-    model.write(userList)
+  deleteChildren: async (req, res) => {
+    await modelInstance.deleteChildren(req.params);
     res.redirect("/users-list");
   },
 };
