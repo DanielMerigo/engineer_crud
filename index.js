@@ -15,7 +15,7 @@ app.get("/users-form", controller.renderUsersForm);
 
 app.post("/users-form", controller.insertUser);
 
-app.get("/users-list", controller.showUsers)
+app.get("/users-list", controller.listUsers)
 
 app.get("/users-delete/:id", controller.deleteUser);
 
@@ -25,11 +25,11 @@ app.get("/user-childrens/:id", controller.renderChildrenForm);
 
 app.post("/user-childrens/:id", controller.insertChildren);
 
-app.get("/edit-children/:id/:children_id", controller.renderEditChildrens);
+app.get("/edit-children/:id/:childrenId", controller.renderEditChildrens);
 
-app.post("/edit-children/:id/:children_id", controller.editChildren);
+app.post("/edit-children/:id/:childrenId", controller.editChildren);
 
-app.get("/delete-children/:id/:children_id", controller.deleteChildren);
+app.get("/delete-children/:id/:childrenId", controller.deleteChildren);
 
 app.post("/users-edit/:id", controller.editUser);
 

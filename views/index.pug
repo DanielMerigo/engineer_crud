@@ -21,12 +21,12 @@ html
                                     div(class="childrens_center")
                                         each chil in val.childrens
                                             div(class="childrens")
-                                                p=`Nome: ${chil.children_name}`
-                                                p=`Idade: ${chil.children_age}`
+                                                p=`Nome: ${chil.childrenName}`
+                                                p=`Idade: ${chil.childrenAge}`
                                                 div(class="childrens_btn")
-                                                        a(class=`edit` href=`/edit-children/${val._id}/${chil.children_id}`)
+                                                        a(class=`edit` href=`/edit-children/${val._id}/${chil.childrenId}`)
                                                             i.fa.fa-pencil
-                                                        a(class="delete" href=`/delete-children/${val._id}/${chil.children_id}`) 
+                                                        a(class="delete" href=`/delete-children/${val._id}/${chil.childrenId}`) 
                                                             i.fa.fa-trash 
                             div(class="btn")
                                 a(class=`edit` href=`/users-edit/${val._id}`) Editar 

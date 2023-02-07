@@ -3,7 +3,7 @@ const model = require("../models/users");
 const { MongoClient } = require("mongodb");
 const uri = "mongodb://localhost:27017";
 const client = new MongoClient(uri);
-const dbConnection = client.db("eureca");
+const dbConnection = client.db("engineer_crud");
 
 const modelInstance = new model(dbConnection);
 
@@ -12,31 +12,30 @@ module.exports = {
     res.render("userForm", {
       title: "Users",
       message: "Adicione um Usuario",
-      btn1: "Enviar",
+      submitBtn: "enviar",
       route: "/users-form",
     });
   },
-  insertUser: (req, res) => {
-    modelInstance.createUser(req.body);
+  insertUser: async(req, res) => {
+    await modelInstance.createUser(req.body);
     res.redirect("/users-list");
   },
-  showUsers: async (req, res) => {
+  listUsers: async (req, res) => {
     let userList = await modelInstance.list();
     res.render("index", {
       title: "Users",
       message: "Lista de usuarios",
       data: userList,
-      btn1: "edit",
-      btn2: "delete",
+      editBtn: "edit",
+      deleteBtn: "delete",
     });
   },
-
   renderUsersEditForm: async (req, res) => {
     let user = await modelInstance.getUser(req.params.id);
     res.render("userForm", {
       title: "Edit user",
       message: `Editar usuario`,
-      btn1: `Confirm`,
+      submitBtn: `Enviar`,
       userId: req.params.id,
       userName: user.name,
       userPhone: user.phone,
@@ -56,7 +55,7 @@ module.exports = {
     res.render("childrenForm", {
       title: "Add children",
       message: `Adicionar filho(a) para ${user.name}`,
-      btn1: `Confirm`,
+      submitBtn: `Enviar`,
       route: `/user-childrens/${req.params.id}`,
     });
   },
@@ -65,10 +64,10 @@ module.exports = {
     res.render("childrenForm", {
       title: "Edit children",
       message: `Editar filho`,
-      btn1: `Confirm`,
-      route: `/edit-children/${req.params.id}/${req.params.children_id}`,
-      childrenName: child[0].children_name,
-      childrenAge: child[0].children_age,
+      submitBtn: `Enviar`,
+      route: `/edit-children/${req.params.id}/${req.params.childrenId}`,
+      childrenName: child[0].childrenName,
+      childrenAge: child[0].childrenAge,
     });
   },
   insertChildren: async (req, res) => {

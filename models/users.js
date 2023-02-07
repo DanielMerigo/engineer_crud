@@ -22,14 +22,14 @@ module.exports = class Users {
         },
         {
           $match: {
-            "childrens.children_id": new ObjectId(params.children_id),
+            "childrens.childrenId": new ObjectId(params.childrenId),
           },
         },
         {
           $project: {
-            children_id: "$childrens.children_id",
-            children_name: "$childrens.children_name",
-            children_age: "$childrens.children_age",
+            childrenId: "$childrens.childrenId",
+            childrenName: "$childrens.childrenName",
+            childrenAge: "$childrens.childrenAge",
           },
         },
       ])
@@ -59,9 +59,9 @@ module.exports = class Users {
       {
         $push: {
           childrens: {
-            children_id: new ObjectId(),
-            children_name: userData.name,
-            children_age: userData.age,
+            childrenId: new ObjectId(),
+            childrenName: userData.name,
+            childrenAge: userData.age,
           },
         },
       }
@@ -71,12 +71,12 @@ module.exports = class Users {
     await this.collection.findOneAndUpdate(
       {
         _id: new ObjectId(params.id),
-        "childrens.children_id": new ObjectId(params.children_id),
+        "childrens.childrenId": new ObjectId(params.childrenId),
       },
       {
         $set: {
-          "childrens.$.children_name": childrenBody.name,
-          "childrens.$.children_age": childrenBody.age,
+          "childrens.$.childrenName": childrenBody.name,
+          "childrens.$.childrenAge": childrenBody.age,
         },
       }
     );
@@ -84,7 +84,7 @@ module.exports = class Users {
   async deleteChildren(params) {
     await this.collection.updateOne(
       { _id: new ObjectId(params.id) },
-      { $pull: { childrens: { children_id: new ObjectId(params.children_id) } } }
+      { $pull: { childrens: { childrenId: new ObjectId(params.childrenId) } } }
     );
   }
 };
