@@ -1,9 +1,9 @@
 const model = require("../models/users");
 
 const { MongoClient } = require("mongodb");
-const uri = "mongodb://localhost:27017";
-const client = new MongoClient(uri);
-const dbConnection = client.db("engineer_crud");
+
+const client = new MongoClient(process.env.URI);
+const dbConnection = client.db(process.env.DB);
 
 const modelInstance = new model(dbConnection);
 
