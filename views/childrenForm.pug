@@ -11,11 +11,11 @@ html
             div(class="form")        
                 form(action=route method="POST")
                     div(class="inputs") 
-                        label(for="name")="Nome"
-                        input(type="text" name="name" id="name" value=userName required)
+                        label(for="name")="Nome do filho"
+                        input(type="text" name="name" id="name" value=childrenName  required)
                     div(class="inputs") 
-                        label(for="phone")="Telefone" 
-                        input(type="text" name="phone" id="phone" value=userPhone required)
+                        label(for="age")="Idade do filho" 
+                        input(type="number" name="age" id="age" value=childrenAge required)
                     div(class="inputs_button") 
-                        button(type="submit")=submitBtn 
+                        button(type="submit")=submitBtn
                 

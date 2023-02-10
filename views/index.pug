@@ -2,17 +2,35 @@ html
     head
         title=title
         link(type="text/css" rel="stylesheet", href="style.css")
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     body
         div 
             div(class="center_h1")   
                 h1=message
-            each val in data
-                div(class="center")
-                    ul
-                        p=`Nome: ${val.name}`
-                        p=`Telefone: ${val.phone}`
-                        div(class="btn")
-                            a(class=`edit` href=`/users-edit/${val.id}`) Editar 
-                            a(class=`delete` href=`/users-delete/${val.id}`) Deletar
+            each val, index in data
+                    div(class="center") 
+                        ul
+                            h3='Usuario '
+                            p=`Nome: ${val.name}`
+                            p=`Telefone: ${val.phone}`
+                                h3='Filhos '
+                                if val.childrens == 0
+                                    p=`O usuario ainda não tem filhos cadastrados :(`
+                                else
+                                    div(class="childrens_center")
+                                        each chil in val.childrens
+                                            div(class="childrens")
+                                                p=`Nome: ${chil.childrenName}`
+                                                p=`Idade: ${chil.childrenAge}`
+                                                div(class="childrens_btn")
+                                                        a(class=`edit` href=`/edit-children/${val._id}/${chil.childrenId}`)
+                                                            i.fa.fa-pencil
+                                                        a(class="delete" href=`/delete-children/${val._id}/${chil.childrenId}`) 
+                                                            i.fa.fa-trash 
+                            div(class="btn")
+                                a(class=`edit` href=`/users-edit/${val._id}`) Editar 
+                                a(class=`edit` href=`/user-childrens/${val._id}`) Adicionar filhos
+                                a(class=`delete` href=`/users-delete/${val._id}`) Deletar
         div(class="center")                       
             a(class='return' href='/users-form') Adicionar mais usuarios

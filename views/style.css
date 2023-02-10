@@ -58,3 +58,29 @@ ul {
   background-color: #f2bc8a;
   margin-top: 30px;
 }
+
+.childrens_center{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.childrens_btn {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.childrens{
+  background-color: burlywood;
+  width: 25%;
+  margin-left: 30px;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.fa.fa-trash {
+  color: white;
+  
+}
