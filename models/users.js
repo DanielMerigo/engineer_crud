@@ -1,9 +1,8 @@
 const { ObjectId } = require("mongodb");
-
 module.exports = class Users {
+  collection;
   constructor(dbConnection) {
-    const users = dbConnection.collection("users");
-    this.collection = users;
+    this.collection = dbConnection.collection("users");
   }
   async list() {
     let userList = await this.collection.find({}).toArray();
