@@ -1,24 +1,25 @@
-const usersModel = require('../models/users.js')
+const UsersModel  = require("../models/users.js");
+const userList = "/users-list"
 
 module.exports = class UsersController {
   model;
-  constructor(dbConnection){
-    this.model = new usersModel(dbConnection);
+  constructor(dbConnection) {
+    this.model = new UsersModel(dbConnection);
   }
   async insertUser(req, res) {
     await this.model.createUser(req.body);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
   async renderUsersForm(req, res) {
-      res.render("userForm", {
-        title: "Users",
-        message: "Adicione um Usuario",
-        submitBtn: "enviar",
-        route: "/users-form",
-      });
-    }
-  async listUsers(req, res){
-    let userList = await this.model.list()
+    res.render("userForm", {
+      title: "Users",
+      message: "Adicione um Usuario",
+      submitBtn: "enviar",
+      route: "/users-form",
+    });
+  }
+  async listUsers(req, res) {
+    let userList = await this.model.list();
     res.render("index", {
       title: "Users",
       message: "Lista de usuarios",
@@ -27,7 +28,7 @@ module.exports = class UsersController {
       deleteBtn: "delete",
     });
   }
-    async renderUsersEditForm(req, res) {
+  async renderUsersEditForm(req, res) {
     let user = await this.model.getUser(req.params.id);
     res.render("userForm", {
       title: "Edit user",
@@ -39,19 +40,19 @@ module.exports = class UsersController {
       route: `/users-edit/${req.params.id}`,
     });
   }
-    async editUser(req, res) {
+  async editUser(req, res) {
     await this.model.editUser(req.params.id, req.body);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
-    async editUser(req, res) {
+  async editUser(req, res) {
     await this.model.editUser(req.params.id, req.body);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
-    async deleteUser(req, res) {
+  async deleteUser(req, res) {
     await this.model.userDelete(req.params.id);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
-    async renderChildrenForm (req, res) {
+  async renderChildrenForm(req, res) {
     let user = await this.model.getUser(req.params.id);
     res.render("childrenForm", {
       title: "Add children",
@@ -59,8 +60,8 @@ module.exports = class UsersController {
       submitBtn: `Enviar`,
       route: `/user-childrens/${req.params.id}`,
     });
-  } 
-    async renderEditChildrens(req, res)  {
+  }
+  async renderEditChildrens(req, res) {
     let child = await this.model.getChild(req.params);
     res.render("childrenForm", {
       title: "Edit children",
@@ -71,21 +72,16 @@ module.exports = class UsersController {
       childrenAge: child[0].childrenAge,
     });
   }
-    async insertChildren(req, res){
+  async insertChildren(req, res) {
     await this.model.createChildren(req.params.id, req.body);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
-    async editChildren(req, res) {
+  async editChildren(req, res) {
     await this.model.editChildren(req.params, req.body);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
-    async deleteChildren(req, res){
+  async deleteChildren(req, res) {
     await this.model.deleteChildren(req.params);
-    res.redirect("/users-list");
+    res.redirect(userList);
   }
-}
-
-
-
-
-
+};

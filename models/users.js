@@ -40,7 +40,7 @@ module.exports = class Users {
     await this.collection.insertOne(userData);
   }
   async getUser(userId) {
-    let user = await this.collection.findOne({ _id: new ObjectId(userId) });
+    const user = await this.collection.findOne({ _id: new ObjectId(userId) });
     return user;
   }
   async editUser(userId, userData) {
