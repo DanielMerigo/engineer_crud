@@ -9,11 +9,10 @@ const ChildrenSchema = new Schema({
 });
 
 const UserSchema = new Schema({
-  // name: String,
   name: { type: String, default: "?" },
   phone: Number,
   childrens: [ChildrenSchema],
 });
 const UserModel = mongoose.model("Users", UserSchema);
 
-module.exports = UserModel;
+module.exports = { UserModel };
