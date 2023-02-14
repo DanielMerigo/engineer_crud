@@ -1,64 +1,46 @@
-const { ObjectId } = require("mongodb");
+const { ObjectId } = require("bson");
+const { UserModel } = require("./schema");
+
 module.exports = class Users {
-  collection;
-  constructor(dbConnection) {
-    this.collection = dbConnection.collection("users");
+  static async list() {
+    return await UserModel.find({});
   }
-  async list() {
-    let userList = await this.collection.find({}).toArray();
-    return userList;
-  }
-  async getChild(params) {
-    const result = await this.collection
-      .aggregate([
-        {
-          $match: {
-            _id: new ObjectId(params.id),
-          },
-        },
-        {
-          $unwind: "$childrens",
-        },
-        {
-          $match: {
-            "childrens.childrenId": new ObjectId(params.childrenId),
-          },
-        },
-        {
-          $project: {
-            childrenId: "$childrens.childrenId",
-            childrenName: "$childrens.childrenName",
-            childrenAge: "$childrens.childrenAge",
-          },
-        },
-      ])
-      .toArray();
+  static async getChild(params) {
+    const result = await UserModel.aggregate([
+      { $match: { _id: ObjectId(params.id) } },
+    ])
+      .unwind("childrens")
+      .match({ "childrens._id": ObjectId(params.childrenId) })
+      .project({
+        _id: "$childrens._id",
+        childrenName: "$childrens.childrenName",
+        childrenAge: "$childrens.childrenAge",
+      });
     return result;
   }
-  async createUser(userData) {
-    userData.childrens = [];
-    await this.collection.insertOne(userData);
-  }
-  async getUser(userId) {
-    const user = await this.collection.findOne({ _id: new ObjectId(userId) });
+  static async createUser(userData) {
+    const user = new UserModel(userData);
+    await user.save();
     return user;
   }
-  async editUser(userId, userData) {
-    await this.collection.updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: { name: userData.name, phone: userData.phone } }
+  static async getUser(_id) {
+    return await UserModel.findOne({ _id });
+  }
+  static async editUser(_id, userData) {
+    await UserModel.updateOne(
+      { _id },
+      { name: userData.name, phone: userData.phone }
     );
   }
-  async userDelete(userId) {
-    await this.collection.deleteOne({ _id: new ObjectId(userId) });
+  static async userDelete(_id) {
+    await UserModel.deleteOne({ _id });
   }
-  async createChildren(userId, userData) {
-    await this.collection.updateOne(
-      { _id: new ObjectId(userId) },
+  static async createChildren(_id, userData) {
+    await UserModel.updateOne(
+      { _id },
       {
         $push: {
           childrens: {
-            childrenId: new ObjectId(),
             childrenName: userData.name,
             childrenAge: userData.age,
           },
@@ -66,24 +48,22 @@ module.exports = class Users {
       }
     );
   }
-  async editChildren(params, childrenBody) {
-    await this.collection.findOneAndUpdate(
+  static async editChildren(params, childrenBody) {
+    await UserModel.findOneAndUpdate(
       {
-        _id: new ObjectId(params.id),
-        "childrens.childrenId": new ObjectId(params.childrenId),
+        _id: params.id,
+        "childrens._id": params.childrenId,
       },
       {
-        $set: {
-          "childrens.$.childrenName": childrenBody.name,
-          "childrens.$.childrenAge": childrenBody.age,
-        },
+        "childrens.$.childrenName": childrenBody.name,
+        "childrens.$.childrenAge": childrenBody.age,
       }
     );
   }
-  async deleteChildren(params) {
-    await this.collection.updateOne(
-      { _id: new ObjectId(params.id) },
-      { $pull: { childrens: { childrenId: new ObjectId(params.childrenId) } } }
+  static async deleteChildren(params) {
+    await UserModel.findOneAndUpdate(
+      { _id: params.id },
+      { $pull: { childrens: { _id: ObjectId(params.childrenId) } } }
     );
   }
 };
