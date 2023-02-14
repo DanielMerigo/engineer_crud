@@ -7,27 +7,15 @@ module.exports = class Users {
   }
   static async getChild(params) {
     const result = await UserModel.aggregate([
-      {
-        $match: {
-          _id: ObjectId(params.id),
-        },
-      },
-      {
-        $unwind: "$childrens",
-      },
-      {
-        $match: {
-          "childrens._id": ObjectId(params.childrenId),
-        },
-      },
-      {
-        $project: {
-          _id: "$childrens._id",
-          childrenName: "$childrens.childrenName",
-          childrenAge: "$childrens.childrenAge",
-        },
-      },
-    ]);
+      { $match: { _id: ObjectId(params.id) } },
+    ])
+      .unwind("childrens")
+      .match({ "childrens._id": ObjectId(params.childrenId) })
+      .project({
+        _id: "$childrens._id",
+        childrenName: "$childrens.childrenName",
+        childrenAge: "$childrens.childrenAge",
+      });
     return result;
   }
   static async createUser(userData) {
@@ -41,7 +29,7 @@ module.exports = class Users {
   static async editUser(_id, userData) {
     await UserModel.updateOne(
       { _id },
-      {name: userData.name, phone: userData.phone}
+      { name: userData.name, phone: userData.phone }
     );
   }
   static async userDelete(_id) {
@@ -54,7 +42,7 @@ module.exports = class Users {
         $push: {
           childrens: {
             childrenName: userData.name,
-            childrenAge: userData.age
+            childrenAge: userData.age,
           },
         },
       }
@@ -67,8 +55,8 @@ module.exports = class Users {
         "childrens._id": params.childrenId,
       },
       {
-          "childrens.$.childrenName": childrenBody.name,
-          "childrens.$.childrenAge": childrenBody.age,
+        "childrens.$.childrenName": childrenBody.name,
+        "childrens.$.childrenAge": childrenBody.age,
       }
     );
   }
