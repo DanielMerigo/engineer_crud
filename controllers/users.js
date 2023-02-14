@@ -53,6 +53,7 @@ module.exports = class UsersController {
     });
   }
   static async renderEditChildrens(req, res) {
+    console.log(req.params)
     let child = await UsersModel.getChild(req.params);
     res.render("childrenForm", {
       title: "Edit children",

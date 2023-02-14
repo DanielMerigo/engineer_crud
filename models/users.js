@@ -17,12 +17,12 @@ module.exports = class Users {
       },
       {
         $match: {
-          "childrens.childrenId": ObjectId(params.childrenId),
+          "childrens._id": ObjectId(params.childrenId),
         },
       },
       {
         $project: {
-          childrenId: "$childrens.childrenId",
+          _id: "$childrens._id",
           childrenName: "$childrens.childrenName",
           childrenAge: "$childrens.childrenAge",
         },
@@ -53,7 +53,6 @@ module.exports = class Users {
       {
         $push: {
           childrens: {
-            childrenId: ObjectId(),
             childrenName: userData.name,
             childrenAge: userData.age
           },
@@ -65,10 +64,9 @@ module.exports = class Users {
     await UserModel.findOneAndUpdate(
       {
         _id: params.id,
-        "childrens.childrenId": ObjectId(params.childrenId),
+        "childrens._id": params.childrenId,
       },
       {
-
           "childrens.$.childrenName": childrenBody.name,
           "childrens.$.childrenAge": childrenBody.age,
       }
@@ -77,7 +75,7 @@ module.exports = class Users {
   static async deleteChildren(params) {
     await UserModel.findOneAndUpdate(
       { _id: params.id },
-      { $pull: { childrens: { childrenId: ObjectId(params.childrenId) } } }
+      { $pull: { childrens: { _id: ObjectId(params.childrenId) } } }
     );
   }
 };
