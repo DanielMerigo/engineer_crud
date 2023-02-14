@@ -9,7 +9,7 @@ module.exports = class Users {
     const result = await UserModel.aggregate([
       {
         $match: {
-          _id: new ObjectId(params.id),
+          _id: ObjectId(params.id),
         },
       },
       {
@@ -17,7 +17,7 @@ module.exports = class Users {
       },
       {
         $match: {
-          "childrens.childrenId": new ObjectId(params.childrenId),
+          "childrens.childrenId": ObjectId(params.childrenId),
         },
       },
       {
@@ -41,7 +41,7 @@ module.exports = class Users {
   static async editUser(_id, userData) {
     await UserModel.updateOne(
       { _id },
-      { $set: { name: userData.name, phone: userData.phone } }
+      {name: userData.name, phone: userData.phone}
     );
   }
   static async userDelete(_id) {
@@ -55,7 +55,7 @@ module.exports = class Users {
           childrens: {
             childrenId: ObjectId(),
             childrenName: userData.name,
-            childrenAge: userData.age,
+            childrenAge: userData.age
           },
         },
       }
@@ -65,20 +65,19 @@ module.exports = class Users {
     await UserModel.findOneAndUpdate(
       {
         _id: params.id,
-        "childrens.childrenId": params.childrenId,
+        "childrens.childrenId": ObjectId(params.childrenId),
       },
       {
-        $set: {
+
           "childrens.$.childrenName": childrenBody.name,
           "childrens.$.childrenAge": childrenBody.age,
-        },
       }
     );
   }
   static async deleteChildren(params) {
     await UserModel.findOneAndUpdate(
       { _id: params.id },
-      { $pull: { childrens: { childrenId: params.childrenId } } }
+      { $pull: { childrens: { childrenId: ObjectId(params.childrenId) } } }
     );
   }
 };

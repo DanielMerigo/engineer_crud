@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon start index.js --ignore data.json",
     "lint": "prettier --check .",
     "format": "prettier --write ."
@@ -24,6 +24,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "husky": "^8.0.2",
+    "jest": "^29.4.2",
     "mongodb": "4.12",
     "mongoose": "^6.9.1",
     "nodemon": "^2.0.20",

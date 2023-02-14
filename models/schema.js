@@ -11,7 +11,7 @@ const ChildrenSchema = new Schema({
 const UserSchema = new Schema({
   name: { type: String, default: "?" },
   phone: Number,
-  childrens: [ChildrenSchema],
+  childrens: [],
 });
 const UserModel = mongoose.model("Users", UserSchema);
 

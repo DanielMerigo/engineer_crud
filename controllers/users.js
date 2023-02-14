@@ -1,12 +1,10 @@
 const UsersModel = require("../models/users.js");
 const userList = "/";
-
 module.exports = class UsersController {
   static async insertUser(req, res) {
     await UsersModel.createUser(req.body);
     res.redirect(userList);
   }
-
   static async renderUsersForm(req, res) {
     res.render("userForm", {
       title: "Users",
