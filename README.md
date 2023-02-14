@@ -10,12 +10,11 @@ install dependencies
 
 ### Create a new archive .env 
 
-URI="mongodb://localhost:27017"
-DB="yourdatabasename"
-PORT=
+URI="mongodb://localhost:27017/yourdbname"
+PORT= 3000
 
 To run project
 
 ```sh 
-node index.js
+    npm start
 ```
